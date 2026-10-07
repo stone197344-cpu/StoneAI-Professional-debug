@@ -1,0 +1,122 @@
+--- dec2.org/smali_classes3/com/leestone/stoneai/ui/ChatScreenKt.smali	2026-10-07 08:11:08.323505872 +0000
++++ dec2/smali_classes3/com/leestone/stoneai/ui/ChatScreenKt.smali	2026-10-07 08:11:34.627659038 +0000
+@@ -691,15 +691,15 @@
+ 
+     .end local v13    # "it\\7":Ljava/lang/Object;
+     .local v19, "it\\7":Ljava/lang/Object;
+-    new-instance v13, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;
+-
+     move/from16 v21, v15
+ 
+     const/4 v15, 0x0
+ 
+     .end local v15    # "$i$a$-cache-ChatScreenKt$ChatScreen$1\\9\\297\\0":I
+     .local v21, "$i$a$-cache-ChatScreenKt$ChatScreen$1\\9\\297\\0":I
+-    invoke-direct {v13, v0, v8, v15}, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;-><init>(Lcom/leestone/stoneai/data/StudioUiState;Landroidx/compose/foundation/lazy/LazyListState;Lkotlin/coroutines/Continuation;)V
++    invoke-static {v0, v8, v15}, Lcom/leestone/stoneai/ui/ChatScrollSupport;->createChatScrollEffect(Lcom/leestone/stoneai/data/StudioUiState;Landroidx/compose/foundation/lazy/LazyListState;Lkotlin/coroutines/Continuation;)Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;
++
++    move-result-object v13
+ 
+     check-cast v13, Lkotlin/jvm/functions/Function2;
+ 
+--- dec2.org/smali_classes3/com/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1.smali	2026-10-07 08:11:08.323505872 +0000
++++ dec2/smali_classes3/com/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1.smali	2026-10-07 08:11:34.627659038 +0000
+@@ -70,17 +70,20 @@
+ 
+ .field final synthetic $state:Lcom/leestone/stoneai/data/StudioUiState;
+ 
++.field final synthetic $atBottom:Z
++
+ .field label:I
+ 
+ 
+ # direct methods
+-.method constructor <init>(Lcom/leestone/stoneai/data/StudioUiState;Landroidx/compose/foundation/lazy/LazyListState;Lkotlin/coroutines/Continuation;)V
++.method constructor <init>(Lcom/leestone/stoneai/data/StudioUiState;Landroidx/compose/foundation/lazy/LazyListState;ZLkotlin/coroutines/Continuation;)V
+     .locals 1
+     .annotation system Ldalvik/annotation/Signature;
+         value = {
+             "(",
+             "Lcom/leestone/stoneai/data/StudioUiState;",
+             "Landroidx/compose/foundation/lazy/LazyListState;",
++            "Z",
+             "Lkotlin/coroutines/Continuation<",
+             "-",
+             "Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;",
+@@ -92,9 +95,11 @@
+ 
+     iput-object p2, p0, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;->$listState:Landroidx/compose/foundation/lazy/LazyListState;
+ 
++    iput-boolean p3, p0, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;->$atBottom:Z
++
+     const/4 v0, 0x2
+ 
+-    invoke-direct {p0, v0, p3}, Lkotlin/coroutines/jvm/internal/SuspendLambda;-><init>(ILkotlin/coroutines/Continuation;)V
++    invoke-direct {p0, v0, p4}, Lkotlin/coroutines/jvm/internal/SuspendLambda;-><init>(ILkotlin/coroutines/Continuation;)V
+ 
+     return-void
+ .end method
+@@ -102,7 +107,7 @@
+ 
+ # virtual methods
+ .method public final create(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Lkotlin/coroutines/Continuation;
+-    .locals 3
++    .locals 4
+     .annotation system Ldalvik/annotation/Signature;
+         value = {
+             "(",
+@@ -121,7 +126,9 @@
+ 
+     iget-object v2, p0, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;->$listState:Landroidx/compose/foundation/lazy/LazyListState;
+ 
+-    invoke-direct {v0, v1, v2, p2}, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;-><init>(Lcom/leestone/stoneai/data/StudioUiState;Landroidx/compose/foundation/lazy/LazyListState;Lkotlin/coroutines/Continuation;)V
++    iget-boolean v3, p0, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;->$atBottom:Z
++
++    invoke-direct {v0, v1, v2, v3, p2}, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;-><init>(Lcom/leestone/stoneai/data/StudioUiState;Landroidx/compose/foundation/lazy/LazyListState;ZLkotlin/coroutines/Continuation;)V
+ 
+     check-cast v0, Lkotlin/coroutines/Continuation;
+ 
+@@ -215,6 +222,10 @@
+ 
+     if-nez v1, :cond_1
+ 
++    iget-boolean v1, p0, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;->$atBottom:Z
++
++    if-eqz v1, :cond_1
++
+     iget-object v2, p0, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;->$listState:Landroidx/compose/foundation/lazy/LazyListState;
+ 
+     iget-object v1, p0, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;->$state:Lcom/leestone/stoneai/data/StudioUiState;
+@@ -241,7 +252,7 @@
+ 
+     const/4 v7, 0x0
+ 
+-    invoke-static/range {v2 .. v7}, Landroidx/compose/foundation/lazy/LazyListState;->animateScrollToItem$default(Landroidx/compose/foundation/lazy/LazyListState;IILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
++    invoke-static/range {v2 .. v7}, Landroidx/compose/foundation/lazy/LazyListState;->scrollToItem$default(Landroidx/compose/foundation/lazy/LazyListState;IILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+ 
+     move-result-object v1
+ 
+--- /dev/null
++++ b/smali_classes3/com/leestone/stoneai/ui/ChatScrollSupport.smali
+@@ -0,0 +1,21 @@
++.class public final Lcom/leestone/stoneai/ui/ChatScrollSupport;
++.super Ljava/lang/Object;
++.source "ChatScrollSupport.kt"
++
++
++# direct methods
++.method public static final createChatScrollEffect(Lcom/leestone/stoneai/data/StudioUiState;Landroidx/compose/foundation/lazy/LazyListState;Lkotlin/coroutines/Continuation;)Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;
++    .locals 2
++
++    new-instance v0, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;
++
++    invoke-virtual {p1}, Landroidx/compose/foundation/lazy/LazyListState;->getCanScrollForward()Z
++
++    move-result v1
++
++    xor-int/lit8 v1, v1, 0x1
++
++    invoke-direct {v0, p0, p1, v1, p2}, Lcom/leestone/stoneai/ui/ChatScreenKt$ChatScreen$1$1;-><init>(Lcom/leestone/stoneai/data/StudioUiState;Landroidx/compose/foundation/lazy/LazyListState;ZLkotlin/coroutines/Continuation;)V
++
++    return-object v0
++.end method
